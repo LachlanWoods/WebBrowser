@@ -1,0 +1,700 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebBrowser</name>
+    </assembly>
+    <members>
+        <member name="T:WebBrowser.BrowserManager">
+            <summary>
+            The BrowserManager class uses a singleton pattern. This object allows common
+            functions to be accessible from all other classes without needing to pass object references around
+            as paramaters.
+            </summary>
+        </member>
+        <member name="P:WebBrowser.BrowserManager.Instance">
+            <summary>
+            Property to access the instance of this object
+            </summary>
+        </member>
+        <member name="P:WebBrowser.BrowserManager.History">
+            <summary>
+            Property to access the global history object
+            </summary>
+        </member>
+        <member name="P:WebBrowser.BrowserManager.Favourites">
+            <summary>
+            Property to access the favourites object
+            </summary>
+        </member>
+        <member name="P:WebBrowser.BrowserManager.Window">
+            <summary>
+            Property to get and set the window object. This should be used to get or set
+            the reference to the main browser window.
+            </summary>
+        </member>
+        <member name="P:WebBrowser.BrowserManager.CurrentTab">
+            <summary>
+            Property to get and set the currently selected tab
+            </summary>
+        </member>
+        <member name="M:WebBrowser.BrowserManager.#ctor">
+            <summary>
+            Constructor: Creates a GlobalHistory and Favourites object, which are used
+            by the entire web browser to store history and favourite web pages.
+            Also makes a call to load past history and favourites from file as a multithreaded operation
+            </summary>
+        </member>
+        <member name="M:WebBrowser.BrowserManager.SetHomePage">
+            <summary>
+            Creates and displays a prompt, which allows a user
+            to input a url and save it as their homepage.
+            </summary>
+        </member>
+        <member name="M:WebBrowser.BrowserManager.WriteToFileInThread(System.String,System.String)">
+            <summary>
+            Writes content to a file in a new thread
+            </summary>
+            <param name="content">The string to be written to the file</param>
+            <param name="filePath">The path of the file to be written to</param>
+        </member>
+        <member name="M:WebBrowser.BrowserManager.ReadFilesMultithreaded">
+            <summary>
+            Creates and runs two threads that read the favourites and history files
+            in seperate threads. This method waits for both threads to complete to ensure all required files
+            are loaded before the user can interact with the web browser.
+            </summary>
+        </member>
+        <member name="T:WebBrowser.BrowserWindow">
+            <summary>
+            The main window of the web browser
+            </summary>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.#ctor">
+            <summary>
+            Constructor: Initilizes the browser window
+            </summary>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.BrowserWindow_Load(System.Object,System.EventArgs)">
+            <summary>
+            Callback when main window form is loaded
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.CreateNewTab(System.Int32)">
+            <summary>
+            Creates a new tab and displays it in the tab bar at position index
+            </summary>
+            <param name="index">The position of the new tab within the tabbar</param>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.CloseTab(System.Int32)">
+            <summary>
+            Closes the tab at the position of index within the tab bar
+            </summary>
+            <param name="index">The index of the tab to close</param>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.ResizeTabs">
+            <summary>
+            Updates the width of all tabs to fit within the tab bar
+            </summary>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.GetBackButton">
+            <summary>
+            Returns a reference to the back button
+            </summary>
+            <returns>The back button control object</returns>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.GetForwardButton">
+            <summary>
+            Returns a reference to the forward button
+            </summary>
+            <returns>The forward button control object</returns>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.tabBar_MouseClick(System.Object,System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Called when a tab is clicked. A new tab is added if the "new tab" tab is clicked,
+            otherwise we check if the close button was pressed.
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.tabBar_DrawItem(System.Object,System.Windows.Forms.DrawItemEventArgs)">
+            <summary>
+            Draws a close button and tab name onto tabs, or the "add tab" image to the final lab
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.tabBar_Selecting(System.Object,System.Windows.Forms.TabControlCancelEventArgs)">
+            <summary>
+            Callback when selecting a new tab from the tab bar.
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.BrowserWindow_SizeChanged(System.Object,System.EventArgs)">
+            <summary>
+            Resizes tabs when the browser window is resized
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.backButton_Click(System.Object,System.EventArgs)">
+            <summary>
+            Gets the currently selected tab, and goes back to the previous page. This
+            callback is triggered when the back button is clicked.
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.forwardButton_Click(System.Object,System.EventArgs)">
+            <summary>
+            Gets the currently selected tab, and goes forward to the next page. This callback is triggered
+            when the forward button is clicked.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.tabBar_SelectedIndexChanged(System.Object,System.EventArgs)">
+            <summary>
+            Callback when a new tab is selected
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.homeButton_Click(System.Object,System.EventArgs)">
+            <summary>
+            Callback when the home button is clicked. Navigates the user to their homepage
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.historyButton_Click(System.Object,System.EventArgs)">
+            <summary>
+            Callback when the history button is pressed. This will open the history sliding panel.
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.favouritesButton_Click(System.Object,System.EventArgs)">
+            <summary>
+            Callback when the favourites button is pressed. This will open the favourites sliding panel.
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.refreshButton_Click(System.Object,System.EventArgs)">
+            <summary>
+            Callback when the refresh button is clicked. Refreshes the current tabs' webpage
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.BrowserWindow_KeyDown(System.Object,System.Windows.Forms.KeyEventArgs)">
+            <summary>
+            Callback when a key is pressed. This method listens for hotkeys being pressed
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.CodeButton_Click(System.Object,System.EventArgs)">
+            <summary>
+            Callback when the CodeButton is pressed.
+            This will toggle the current tab between showing
+            HTML code and rendered html.
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="F:WebBrowser.BrowserWindow.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:WebBrowser.BrowserWindow.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:WebBrowser.FavouriteEntry">
+            <summary>
+            A control that is used to display a single favourite webpage in the favourites panel
+            </summary>
+        </member>
+        <member name="M:WebBrowser.FavouriteEntry.#ctor(System.String,WebBrowser.Webpage)">
+            <summary>
+            Constructor method to initilise variable values and update control text.
+            </summary>
+            <param name="name">The name of this favourite entry</param>
+            <param name="page">The webpage of the favourite page</param>
+        </member>
+        <member name="M:WebBrowser.FavouriteEntry.editFavouriteButton_Click(System.Object,System.EventArgs)">
+            <summary>
+            Callback to display the form to edit a favourite entry when the edit button is clicked.
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="M:WebBrowser.FavouriteEntry.ShowEditFavouriteForm">
+            <summary>
+            creates the form to edit a favourite item
+            </summary>
+        </member>
+        <member name="M:WebBrowser.FavouriteEntry.UpdateFavouriteEntry(System.Object,System.EventArgs,System.String,System.String)">
+            <summary>
+            Updates the favourite entry when the save button is pressed
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+            <param name="name">The new name of this favourite page</param>
+            <param name="url">The new url of this favourite page</param>
+        </member>
+        <member name="M:WebBrowser.FavouriteEntry.removeFavouriteButton_Click(System.Object,System.EventArgs)">
+            <summary>
+            Callback to remove a favourite entry
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="M:WebBrowser.FavouriteEntry.favouritePanel_Click(System.Object,System.EventArgs)">
+            <summary>
+            Navigate to a favourite page when a favourite page is clicked
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="F:WebBrowser.FavouriteEntry.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:WebBrowser.FavouriteEntry.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:WebBrowser.FavouriteEntry.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:WebBrowser.Favourites">
+            <summary>
+            Stores favourite webpages. Allows for persistent favourites between sessions by saving and loading favourites in XML files
+            </summary>
+        </member>
+        <member name="M:WebBrowser.Favourites.#ctor">
+            <summary>
+            Constructor to create a new favourites list
+            </summary>
+        </member>
+        <member name="M:WebBrowser.Favourites.RemoveFromFavourites(WebBrowser.FavouriteEntry)">
+            <summary>
+            Removes the specified FavouriteEntry from the favourites list
+            </summary>
+            <param name="favourite">The FavouriteEntry to remove</param>
+        </member>
+        <member name="M:WebBrowser.Favourites.AddToFavourites(WebBrowser.FavouriteEntry)">
+            <summary>
+            Inserts the specified FavouriteEntry into the favourites list
+            </summary>
+            <param name="favourite">The FavouriteEntry to add</param>
+        </member>
+        <member name="M:WebBrowser.Favourites.GetFavourites">
+            <summary>
+            Returns the list of favourite entries
+            </summary>
+            <returns>A list of type FavouriteEntry</returns>
+        </member>
+        <member name="M:WebBrowser.Favourites.SaveFavourites">
+            <summary>
+            Formats a XML file, and saves each FavouriteEntry into an xml file.
+            This is performed in a new thread.
+            </summary>
+        </member>
+        <member name="M:WebBrowser.Favourites.LoadFavourites">
+            <summary>
+            Loads favourites from an xml file and adds them to the favourites list.
+            </summary>
+        </member>
+        <member name="T:WebBrowser.GlobalHistory">
+            <summary>
+            Stores the history of the web browser. Allows for persistent history by saving and loading history in XML files
+            </summary>
+        </member>
+        <member name="M:WebBrowser.GlobalHistory.#ctor">
+            <summary>
+            Constructor which creates a new list of type HistoryEntry
+            </summary>
+        </member>
+        <member name="M:WebBrowser.GlobalHistory.RemoveFromHistory(WebBrowser.HistoryEntry)">
+            <summary>
+            Removes a HistoryEntry from the history list and saves the history to file
+            </summary>
+            <param name="page">The HistoryEntry to remove from history</param>
+        </member>
+        <member name="M:WebBrowser.GlobalHistory.AddToHistory(WebBrowser.Webpage)">
+            <summary>
+            Adds a webpage to history and saves the history to file
+            </summary>
+            <param name="page">The webpage to add to history</param>
+        </member>
+        <member name="M:WebBrowser.GlobalHistory.GetHistory">
+            <summary>
+            Returns the history list
+            </summary>
+            <returns>The global history list</returns>
+        </member>
+        <member name="M:WebBrowser.GlobalHistory.SaveHistory">
+            <summary>
+            Writes the history list to an XML file.
+            This is performed in a new thread.
+            </summary>
+        </member>
+        <member name="M:WebBrowser.GlobalHistory.LoadHistory">
+            <summary>
+            Loads past history from history.xml, and stores each entry
+            in the history list.
+            </summary>
+        </member>
+        <member name="T:WebBrowser.HistoryEntry">
+            <summary>
+            A control that is used to display a single webpage in the history panel
+            </summary>
+        </member>
+        <member name="M:WebBrowser.HistoryEntry.#ctor(WebBrowser.Webpage)">
+            <summary>
+            Constructor which creates a new History Entry for the specified Webpage
+            </summary>
+            <param name="page">The webpage corresponding to this history entry</param>
+        </member>
+        <member name="M:WebBrowser.HistoryEntry.GetPage">
+            <summary>
+            Returns the webpage of this history entry
+            </summary>
+            <returns>The Webpage of this history entry</returns>
+        </member>
+        <member name="M:WebBrowser.HistoryEntry.SetupUI">
+            <summary>
+            Sets the text of the url and date label displayed on this entry.
+            </summary>
+        </member>
+        <member name="M:WebBrowser.HistoryEntry.removeHistroyButton_Click(System.Object,System.EventArgs)">
+            <summary>
+            Callback when the remove history button is clicked. This will remove a history entry from the history list.
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="M:WebBrowser.HistoryEntry.historyPanel_Click(System.Object,System.EventArgs)">
+            <summary>
+            Button Callback. Navigate to the webpage corresponding to this history entry when it is clicked.
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="F:WebBrowser.HistoryEntry.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:WebBrowser.HistoryEntry.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:WebBrowser.HistoryEntry.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:WebBrowser.Program.Main">
+            <summary>
+            The main entry point for the application.
+            </summary>
+        </member>
+        <member name="T:WebBrowser.SlidingPanel">
+            <summary>
+            A sliding panel control that extends the Panel class. A SlidingPanel object creates
+            a panel that can slide in and out from the right side of a form.
+            </summary>
+        </member>
+        <member name="M:WebBrowser.SlidingPanel.#ctor">
+            <summary>
+            Constructor to create a new sliding panel control
+            </summary>
+        </member>
+        <member name="P:WebBrowser.SlidingPanel.IsOpen">
+            <summary>
+            Property that returns a boolean indicating if this panel is opened or closed
+            </summary>
+        </member>
+        <member name="M:WebBrowser.SlidingPanel.TogglePanel">
+            <summary>
+            Opens this panel if it is closed, or closes it if it is open.
+            </summary>
+        </member>
+        <member name="M:WebBrowser.SlidingPanel.OpenPanel">
+            <summary>
+            Opens this panel if it is not already open
+            </summary>
+        </member>
+        <member name="M:WebBrowser.SlidingPanel.ClosePanel">
+            <summary>
+            Closes this panel if it is not already closed.
+            </summary>
+        </member>
+        <member name="M:WebBrowser.SlidingPanel.RunTimer(System.Object,System.EventArgs)">
+            <summary>
+            Called on the timers tick even. This function will change the width
+            of the side panel to make it grow or shrink from the right side of the screen.
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="T:WebBrowser.Tab">
+            <summary>
+            Extends the TabPage class. This class represents a single tab within the web browser.
+            Each tab object can perform HTTP requests in a new thread using a background worker.
+            </summary>
+        </member>
+        <member name="M:WebBrowser.Tab.#ctor">
+            <summary>
+            Constructor method. Creates the tabs' GUI and background worker, then goes to the homepage
+            </summary>
+        </member>
+        <member name="M:WebBrowser.Tab.NavigateToPage(WebBrowser.Webpage,System.Boolean)">
+            <summary>
+            Sets the background worker to load the requested page
+            </summary>
+            <param name="page">The webpage to load</param>
+            <param name="addToHistory">Should the current page be added to the history</param>
+        </member>
+        <member name="M:WebBrowser.Tab.SearchButtonPressed(System.Object,System.EventArgs)">
+            <summary>
+            Callback when the Search button is pressed. This will navigate to url specified in the search text box
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="M:WebBrowser.Tab.SearchBarKeyPressed(System.Object,System.Windows.Forms.KeyPressEventArgs)">
+            <summary>
+            Callback when a key is pressed and the searchbar is selected.
+            If the enter key is pressed, then this tab will navigate to the url specified in the search text box
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="M:WebBrowser.Tab.WebLinkPressed(System.Object,System.Windows.Forms.LinkClickedEventArgs)">
+            <summary>
+            Callback when a link displayed in the webDisplay is clicked. This will navigate the current page
+            to the url of the clicked link.
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="M:WebBrowser.Tab.HTMLWebLinkPressed(System.Object,TheArtOfDev.HtmlRenderer.Core.Entities.HtmlLinkClickedEventArgs)">
+            <summary>
+            Callback when a link displayed in the htmlDisplay is clicked. This will navigate the current page
+            to the url of the clicked link.
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="M:WebBrowser.Tab.RefreshPage">
+            <summary>
+            Refreshes the current webpage
+            </summary>
+        </member>
+        <member name="M:WebBrowser.Tab.GetLocalTabHistory">
+            <summary>
+            Returns the local history of this tab
+            </summary>
+            <returns>The local history list</returns>
+        </member>
+        <member name="M:WebBrowser.Tab.ToggleHTMLView">
+            <summary>
+            Toggles between showing HTML code and a rendered website
+            on this tab only
+            </summary>
+        </member>
+        <member name="M:WebBrowser.Tab.CreateGUI">
+            <summary>
+            Creates the controls (GUI) of the new tab when the tab is first created
+            </summary>
+        </member>
+        <member name="M:WebBrowser.Tab.SearchInNewThread(System.Object,System.ComponentModel.DoWorkEventArgs)">
+            <summary>
+            Performes the work of the Background worker.
+            Given a webpage, this method will perform a http request in a new tab, and return a string of HTML, or an error status code
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="M:WebBrowser.Tab.SearchResultReturned(System.Object,System.ComponentModel.RunWorkerCompletedEventArgs)">
+            <summary>
+            Processes the result of our background worker once it completes
+            </summary>
+            <param name="sender">The object that triggered the event</param>
+            <param name="e">Event specific arguments</param>
+        </member>
+        <member name="M:WebBrowser.Tab.CorrectUrl(System.String)">
+            <summary>
+            Takes an input and appends http:// if the string does not start with
+             either http:// or https://
+            </summary>
+            <param name="input">The string that will be used as the url for a http request</param>
+            <returns>A string that starts with http://</returns>
+        </member>
+        <member name="T:WebBrowser.TabHistory">
+            <summary>
+            Stores the local history of a single tab. This class allows a tab to navigate
+            back and forwards between previously visted webpages
+            </summary>
+        </member>
+        <member name="M:WebBrowser.TabHistory.#ctor">
+            <summary>
+            Constructor which creates a new LinkedList of webpages.
+            </summary>
+        </member>
+        <member name="M:WebBrowser.TabHistory.GetCurrentPage">
+            <summary>
+            Returns the current page that is being displayed by the parent tab.
+            </summary>
+            <returns>The Webpage object of the current page being displayed</returns>
+        </member>
+        <member name="M:WebBrowser.TabHistory.GetBackPage">
+            <summary>
+            If possible, returns the webpage that was viewed before the current webpage.
+            </summary>
+            <returns>The Webpage object of the previously visited page, or null if no webpage was visited before the current page</returns>
+        </member>
+        <member name="M:WebBrowser.TabHistory.GetForwardPage">
+            <summary>
+            If possible, returns the webpage that was viewed after the current webpage.
+            </summary>
+            <returns>The Webpage object of the page visited page after the current page, or null if no webpage was visited after the current page</returns>
+        </member>
+        <member name="M:WebBrowser.TabHistory.AddToHistory(WebBrowser.Webpage)">
+            <summary>
+            Add a webpage to a tabs local history
+            </summary>
+            <param name="page">The Webpage object to add to a tabs local history</param>
+        </member>
+        <member name="M:WebBrowser.TabHistory.UpdateNavButtons">
+            <summary>
+            Sets the back and forward buttons interaction value based on whether or not a user
+            can go back and forwards between pages.
+            </summary>
+        </member>
+        <member name="T:WebBrowser.Webpage">
+            <summary>
+            Object that represents a webpage. Stores the url and access date of a web page.
+            </summary>
+        </member>
+        <member name="M:WebBrowser.Webpage.#ctor(System.String)">
+            <summary>
+            Constructor which creates a new Webpage object given a url and sets the access time
+            to the current time
+            </summary>
+            <param name="url">The url of the webpage</param>
+        </member>
+        <member name="M:WebBrowser.Webpage.#ctor(System.String,System.DateTime)">
+            <summary>
+            overload constructor which takes an access date.
+            used for creating a webpage when loading history
+            </summary>
+            <param name="url">The url of the webpage</param>
+            <param name="accessDate">The date this page was originally accessed</param>
+        </member>
+        <member name="M:WebBrowser.Webpage.GetUrl">
+            <summary>
+            Returns the url of this webpage
+            </summary>
+            <returns>The url of this webpage as a string</returns>
+        </member>
+        <member name="M:WebBrowser.Webpage.GetAccessDate">
+            <summary>
+            Returns the time this page was accessed
+            </summary>
+            <returns>A DateTime object detailing when this webpage was accessed</returns>
+        </member>
+        <member name="T:WebBrowser.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:WebBrowser.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:WebBrowser.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:WebBrowser.Properties.Resources.CloseButton">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:WebBrowser.Properties.Resources.CodeButton">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:WebBrowser.Properties.Resources.FavouritesButton">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:WebBrowser.Properties.Resources.HistoryIcon">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:WebBrowser.Properties.Resources.HomeIcon">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:WebBrowser.Properties.Resources.NavArrowBack">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:WebBrowser.Properties.Resources.NavArrowForward">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:WebBrowser.Properties.Resources.NewTab">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:WebBrowser.Properties.Resources.RefreshButton">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:WebBrowser.Properties.Resources.SearchButton">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+    </members>
+</doc>
